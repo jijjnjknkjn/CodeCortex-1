@@ -29,6 +29,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     onSearch(suggestion);
     setQuery('');
     setShowSuggestions(false);
+    setSuggestions([]);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +57,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           onFocus={() => setShowSuggestions(query.length > 0)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           placeholder="Search by company name or symbol (e.g., Apple, AAPL, Tesla)"
-          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-white"
         />
       </form>
 
@@ -68,7 +69,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             <button
               key={symbol}
               onClick={() => handleSuggestionClick(symbol)}
-              className="w-full text-left px-4 py-3 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg transition-colors duration-150 border-b border-gray-100 last:border-b-0"
+              className="w-full text-left px-4 py-3 hover:bg-blue-50 first:rounded-t-lg last:rounded-b-lg transition-colors duration-150 border-b border-gray-100 last:border-b-0"
             >
               <div className="flex justify-between items-center">
                 <div>

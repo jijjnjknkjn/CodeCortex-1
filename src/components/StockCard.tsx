@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { TrendingUp, TrendingDown, X } from 'lucide-react';
 
 interface StockCardProps {
   symbol: string;
@@ -13,6 +13,8 @@ interface StockCardProps {
     direction: 'up' | 'down';
   };
   onClick: () => void;
+  onRemove?: () => void;
+  isSelected?: boolean;
 }
 
 export default function StockCard({ 
@@ -22,7 +24,9 @@ export default function StockCard({
   change, 
   changePercent,
   prediction,
-  onClick 
+  onClick,
+  onRemove,
+  isSelected = false
 }: StockCardProps) {
   const isPositive = change >= 0;
   const isPredictionUp = prediction.direction === 'up';
@@ -30,8 +34,24 @@ export default function StockCard({
   return (
     <div 
       onClick={onClick}
-      className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 cursor-pointer hover:border-blue-300"
+      className={`bg-white p-6 rounded-xl shadow-sm border transition-all duration-200 cursor-pointer hover:shadow-md relative group ${
+        isSelected 
+          ? 'border-blue-500 ring-2 ring-blue-200' 
+          : 'border-gray-200 hover:border-blue-300'
+      }`}
     >
+      {onRemove && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 hover:bg-gray-100 rounded-full"
+        >
+          <X size={14} className="text-gray-400 hover:text-red-500" />
+        </button>
+      )}
+      
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-bold text-gray-900">{symbol}</h3>

@@ -10,16 +10,26 @@ import { stockDatabase } from './data/stockDatabase';
 
 function App() {
   const [selectedStock, setSelectedStock] = useState('AAPL');
-  const [watchlist, setWatchlist] = useState(['AAPL', 'TSLA', 'GOOGL', 'MSFT']);
+  const [watchlist, setWatchlist] = useState(['AAPL', 'TSLA', 'GOOGL', 'MSFT', 'AMZN', 'META']);
 
   const handleSearch = (symbol: string) => {
     if (mockStocks[symbol]) {
       setSelectedStock(symbol);
+      // Add to watchlist if not already present
       if (!watchlist.includes(symbol)) {
-        setWatchlist([...watchlist, symbol]);
+        setWatchlist(prev => [...prev, symbol]);
       }
     } else {
       alert(`Stock symbol "${symbol}" not found. Try searching for companies like Apple, Microsoft, Tesla, or their symbols.`);
+    }
+  };
+
+  const removeFromWatchlist = (symbol: string) => {
+    setWatchlist(prev => prev.filter(s => s !== symbol));
+    // If removing the currently selected stock, switch to the first one in the list
+    if (selectedStock === symbol && watchlist.length > 1) {
+      const remaining = watchlist.filter(s => s !== symbol);
+      setSelectedStock(remaining[0]);
     }
   };
 
@@ -84,6 +94,8 @@ function App() {
                         direction: prediction.price > stock.currentPrice ? 'up' : 'down'
                       }}
                       onClick={() => setSelectedStock(symbol)}
+                     onRemove={() => removeFromWatchlist(symbol)}
+                     isSelected={selectedStock === symbol}
                     />
                   );
                 })}
